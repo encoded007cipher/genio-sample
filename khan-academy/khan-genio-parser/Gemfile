@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+
+gem 'genio-parser', :git => 'https://github.paypal.com/DevTools/genio-parser.git'
+gem 'genio', :git => 'https://github.paypal.com/DevTools/genio.git'

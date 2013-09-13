@@ -1,0 +1,595 @@
+[
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the id-name of the topic, for instance\n'basic-exponents'.", 
+                "name": "topic_slug", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "[\n  {\n    \"covers\": [],\n    \"creation_date\": \"2011-08-29T00:00:00Z\",\n    \"description\": null,\n    \"display_name\": \"Chain rule 1\",\n    \"h_position\": 54,\n    \"ka_url\": \"http://www.khanacademy.org/exercise/chain_rule_1\",\n    \"kind\": \"Exercise\",\n    \"live\": true,\n    \"name\": \"chain_rule_1\",\n    \"prerequisites\": [\n      \"power_rule\",\n      \"special_derivatives\"\n    ],\n    \"relative_url\": \"/exercise/chain_rule_1\",\n    \"seconds_per_fast_problem\": 10,\n    \"sha1\": \"dcf399dc0718b762a820dbace18f8a1c7e2a0b88\",\n    \"short_display_name\": \"Chain Ru. 1\",\n    \"summative\": false,\n    \"tags\": [],\n    \"v_position\": -23\n  },\n  ...\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list of dicts, each of which holds information\nabout one exercise in the given topic.  The dict includes the\nname of the exercise, its title, its url, prerequisites, etc.", 
+        "summary": "Retrieve a list of all exercises in the topic id'ed by <topic_slug>.", 
+        "url": "/api/v1/playlists/<path:topic_slug>/exercises"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the name identifying the\nexercise (e.g. \"logarithms_1\")", 
+                "name": "exercise_name", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "[\n    {\n        \"date_added\": \"2011-05-04T06:01:47Z\",\n        \"description\": \"An introduction to logarithms\",\n        \"duration\": 587,\n        \"ka_url\": \"http://www.khanacademy.org/video/introduction-to-logarithms\",\n        \"keywords\": \"logarithm, math, khan, academy\",\n        \"kind\": \"Video\",\n        \"playlists\": [\n            \"Pre-algebra\",\n            \"My Top Videos\"\n        ],\n        \"readable_id\": \"introduction-to-logarithms\",\n        \"title\": \"Introduction to Logarithms\",\n        \"url\": \"http://www.youtube.com/watch?v=mQTWzLpCcW0&feature=youtube_gdata_player\",\n        \"views\": 171986,\n        \"youtube_id\": \"mQTWzLpCcW0\"\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each of which represents information about\na single video (as returned by /api/v1/videos/<youtube_id>).", 
+        "summary": "Retrieve a list of all videos associated with <exercise_name>.", 
+        "url": "/api/v1/exercises/<exercise_name>/videos"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "An integer representing the category:\n'0' for 'meteorite', '1' for 'moon', '2' for 'earth', '3' for\n'sun', '4' for 'black hole', or '5' for 'challenge patch'.", 
+                "name": "category", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "{\n    \"category\": 1,\n    \"chart_icon_src\": \"/images/badges/moon-small-chart.png\",\n    \"description\": \"Moon badges are uncommon and represent an investment in learning.\",\n    \"icon_src\": \"/images/badges/moon-small.png\",\n    \"large_icon_src\": \"/images/badges/moon.png\",\n    \"type_label\": \"Moon\"\n}", 
+        "http_method": "GET", 
+        "returns": "A dict describing a single badge category, including the type,\ndescription, image-url, etc.  It will have a 'category' field\nwhic his always equal to the category specified in the url.", 
+        "summary": "Retrieve specific badge category identified by <category>.", 
+        "url": "/api/v1/badges/categories/<category>"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the date/time (all dates are in UTC,\nYYYY-mm-ddTHH:MM:SS format) to start searching for logs\n(example: 2011-10-18T02:41:53 finds all UserVideo objects\nthat were most recently watched since that date).", 
+                "name": "dt_start", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the date/time (all dates are in UTC,\nYYYY-mm-ddTHH:MM:SS format) to stop searching for logs\n(example: 2011-10-18T02:41:53 finds all UserVideo objects\nthat were most recently watched before that date).", 
+                "name": "dt_end", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "[\n   {\n        \"completed\": false,\n        \"duration\": 172,\n        \"kind\": \"UserVideo\",\n        \"last_second_watched\": 20,\n        \"last_watched\": \"2011-05-04T06:01:47Z\",\n        \"points\": 44,\n        \"seconds_watched\": 10,\n        \"user\": \"you@gmail.com\",\n        \"video\": {\n            \"date_added\": \"2011-03-04T06:01:47Z\",\n            \"description\": \"U03_L2_T2_we1 Multiplying Decimals\",\n            \"duration\": 172,\n            \"ka_url\": \"http://www.khanacademy.org/video/multiplying-decimals\",\n            \"keywords\": \"U03_L2_T2_we1, Multiplying, Decimals\",\n            \"kind\": \"Video\",\n            \"playlists\": [\n                \"Developmental Math\"\n            ],\n            \"readable_id\": \"multiplying-decimals\",\n            \"title\": \"Multiplying Decimals\",\n            \"url\": \"http://www.youtube.com/watch?v=JEHejQphIYc&feature=youtube_gdata_player\",\n            \"views\": 9837,\n            \"youtube_id\": \"JEHejQphIYc\"\n        }\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each of which includes information about a\nsingle video: the amount of the video watched, points received,\netc.", 
+        "summary": "Retrieve list of all videos watched by a specified user.", 
+        "url": "/api/v1/user/videos"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the name identifying the\nexercise (e.g. \"logarithms_1\")", 
+                "name": "exercise_name", 
+                "part_of_url": true, 
+                "required": true
+            }, 
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "Retrieve an array of UserExercise objects for all exercises that\nlist <exercise_name> as a prerequisite.\n\nThe logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "[\n    {\n         \"exercise\": \"scientific_notation\",\n         \"exercise_model\": {\n             \"covers\": [],\n             \"creation_date\": \"2011-08-29T00:00:00\",\n             \"display_name\": \"Scientific notation\",\n             \"h_position\": 12,\n             \"ka_url\": \"http://www.khanacademy.org/exercises?exid=scientific_notation\",\n             \"kind\": \"Exercise\",\n             \"live\": true,\n             \"name\": \"scientific_notation\",\n             \"prerequisites\": [\n                 \"exponents_3\",\n                 \"exponent_rules\"\n             ],\n             \"relative_url\": \"/exercises?exid=scientific_notation\",\n             \"seconds_per_fast_problem\": 11.0,\n             \"short_display_name\": \"Sci. Notat.\",\n             \"summative\": \"false\",\n             \"v_position\": 5\n         },\n         \"exercise_states\": {\n             \"endangered\": false,\n             \"proficient\": true,\n             \"reviewing\": false,\n             \"struggling\": false,\n             \"suggested\": false,\n             \"summative\": false\n         },\n         \"first_done\": \"2011-10-11T00:32:55\",\n         \"kind\": \"UserExercise\",\n         \"last_done\": \"2011-10-11T00:38:08\",\n         \"last_review\": \"2011-10-11T00:05:42\",\n         \"longest_streak\": 10,\n         \"next_points\": 15,\n         \"point_display\": \"on\",\n         \"proficient_date\": \"2011-10-11T00:38:08\",\n         \"progress\": 1.0,\n         \"seconds_per_fast_problem\": 11.0,\n         \"streak\": 10,\n         \"streak_start\": 0.012500000000000001,\n         \"summative\": false,\n         \"total_correct\": 12,\n         \"total_done\": 14,\n         \"user\": \"you@gmail.com\"\n    },\n    ...,\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each with information about a single user's\ninteraction with a single exercise, including the user-email,\nthe exercise-name, the number of problems attempted, the current\nstreak, the longest streak, etc.", 
+        "summary": "User-info about all exercises listing <exercise_name> as a prerequisite.", 
+        "url": "/api/v1/user/exercises/<exercise_name>/followup_exercises"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the id-name of the topic, for instance\n'basic-exponents'.", 
+                "name": "topic_slug", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "/api/v1/playlists/<topic_slug>/videos and\n/api/v1/topics/<topic_slug>/videos are identical.  The former is\ndeprecated; all new code should use the '/topics/' url instead.", 
+        "example": "[\n  {\n    \"date_added\": \"2012-02-16T21:32:49Z\",\n    \"description\": \"Why we study differential calculus\",\n    \"download_urls\": {\n      \"m3u8\": \"http://s3.amazonaws.com/KA-youtube-converted/EKvHQc3QEow.m3u8/EKvHQc3QEow.m3u8\",\n      \"mp4\": \"http://s3.amazonaws.com/KA-youtube-converted/EKvHQc3QEow.mp4/EKvHQc3QEow.mp4\",\n      \"png\": \"http://s3.amazonaws.com/KA-youtube-converted/EKvHQc3QEow.mp4/EKvHQc3QEow.png\"\n    },\n    \"duration\": 547,\n    \"ka_url\": \"http://www.khanacademy.org/video/newton-leibniz-and-usain-bolt\",\n    \"keywords\": \"math, calculus, marquee\",\n    \"kind\": \"Video\",\n    \"position\": 1,\n    \"readable_id\": \"newton-leibniz-and-usain-bolt\",\n    \"relative_url\": \"/video/newton-leibniz-and-usain-bolt\",\n    \"title\": \"Newton Leibniz and Usain Bolt\",\n    \"url\": \"http://www.youtube.com/watch?v=EKvHQc3QEow&feature=youtube_gdata_player\",\n    \"views\": 75613,\n    \"youtube_id\": \"EKvHQc3QEow\"\n  },\n  ...\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list of dicts, each of which holds information\nabout one video in the given topic.  The dict includes the\nreadable-id of the video, its title, its url, its youtube-id, etc.", 
+        "summary": "Retrieve a list of all videos in the topic identified by <topic_slug>.", 
+        "url": "/api/v1/playlists/<path:topic_slug>/videos"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "The youtube_id for this video (e.g.\n\"C38B33ZywWs\").", 
+                "name": "youtube_id", 
+                "part_of_url": true, 
+                "required": true
+            }, 
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "{\n    \"completed\": false,\n    \"duration\": 478,\n    \"kind\": \"UserVideo\",\n    \"last_second_watched\": 90,\n    \"last_watched\": \"2011-05-04T06:01:47Z\",\n    \"points\": 16,\n    \"seconds_watched\": 10,\n    \"user\": \"you@gmail.com\",\n    \"video\": {\n        \"date_added\": \"2011-05-04T06:01:47Z\",\n        \"description\": \"(Ax+By)(Ax+By)\",\n        \"duration\": 478,\n        \"ka_url\": \"http://www.khanacademy.org/video/level-1-multiplying-expressions\",\n        \"keywords\": \"Algebra\",\n        \"kind\": \"Video\",\n        \"playlists\": [\n            \"Algebra\"\n        ],\n        \"readable_id\": \"level-1-multiplying-expressions\",\n        \"title\": \"Level 1 multiplying expressions\",\n        \"url\": \"http://www.youtube.com/watch?v=Sc0e6xrRJYY&feature=youtube_gdata_player\",\n        \"views\": 43821,\n        \"youtube_id\": \"Sc0e6xrRJYY\"\n    }\n}", 
+        "http_method": "GET", 
+        "returns": "A dict containing information about a single user's interaction\nwith a single video.  Keys include \"seconds_watched\", \"points\",\n\"last_watched\", etc.", 
+        "summary": "Retrieve info about a single user's interaction with a single video.", 
+        "url": "/api/v1/user/videos/<youtube_id>"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the id-name of the topic, for instance\n'basic-exponents'.", 
+                "name": "topic_slug", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "[\n  {\n    \"covers\": [],\n    \"creation_date\": \"2011-08-29T00:00:00Z\",\n    \"description\": null,\n    \"display_name\": \"Chain rule 1\",\n    \"h_position\": 54,\n    \"ka_url\": \"http://www.khanacademy.org/exercise/chain_rule_1\",\n    \"kind\": \"Exercise\",\n    \"live\": true,\n    \"name\": \"chain_rule_1\",\n    \"prerequisites\": [\n      \"power_rule\",\n      \"special_derivatives\"\n    ],\n    \"relative_url\": \"/exercise/chain_rule_1\",\n    \"seconds_per_fast_problem\": 10,\n    \"sha1\": \"dcf399dc0718b762a820dbace18f8a1c7e2a0b88\",\n    \"short_display_name\": \"Chain Ru. 1\",\n    \"summative\": false,\n    \"tags\": [],\n    \"v_position\": -23\n  },\n  ...\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list of dicts, each of which holds information\nabout one exercise in the given topic.  The dict includes the\nname of the exercise, its title, its url, prerequisites, etc.", 
+        "summary": "Retrieve a list of all exercises in the topic id'ed by <topic_slug>.", 
+        "url": "/api/v1/topic/<topic_slug>/exercises"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,demo_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "[\n    {\n        \"exercise\": \"subtraction_1\",\n        \"first_done\": \"2011-05-01T06:01:47Z\",\n        \"kind\": \"UserExercise\",\n        \"last_done\": \"2011-05-04T06:01:47Z\",\n        \"last_review\": \"2011-05-02T06:01:47Z\",\n        \"longest_streak\": 26,\n        \"proficient_date\": \"2011-05-03T06:01:47Z\",\n        \"seconds_per_fast_problem\": 4.0,\n        \"streak\": 26,\n        \"summative\": false,\n        \"total_done\": 26,\n        \"user\": \"you@gmail.com\"\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each with information about a single user's\ninteraction with a single exercise.  Keys include 'exercise'\n(the name of the exercise), 'user' (the email of the user),\n'last_done', 'streak', 'proficient_date', etc.  TODO(csilvers):\nthis is probably out of date.", 
+        "summary": "Retrieve info about a single user's interaction with a single exercise.", 
+        "url": "/api/v1/user/exercises"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "[\n  {\n    \"kind\": \"UserPlaylist\",\n    \"last_watched\": \"2011-05-04T06:01:47Z\",\n    \"playlist\": {\n        \"ka_url\": \"http://www.khanacademy.org/#algebra\",\n        \"description\": \"Topics covered from very basic algebra all the\n         way through algebra II.  This is the best algebra playlist to\n         start at if you've never seen algebra before.  Once you get\n         your feet wet, you may want to try some of the videos in the\n            \"Algebra I Worked Examples\" playlist.\",\n        \"kind\": \"Playlist\",\n        \"title\": \"Algebra\",\n        \"url\":\n         \"http://gdata.youtube.com/feeds/api/playlists/7AF1C14AF1B05894\",\n        \"youtube_id\": \"7AF1C14AF1B05894\"\n    },\n    \"seconds_watched\": 49,\n    \"title\": \"Algebra\",\n    \"user\": \"you@gmail.com\"\n  },\n  ...\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list of UserPlaylist objects (each a dictionary).\nEach dictionary includes the name of the playlist, the total\nnumber of seconds watched in each playlist, the last time each\nplaylist was watched, etc.", 
+        "summary": "Retrieve all playlists watched by a specific user.  (DEPRECATED)", 
+        "url": "/api/v1/user/playlists"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [], 
+        "description": "This method is deprecated.  Use /api/v1/topictree instead, and\nmanually filter out the entries with a 'kind' of 'Video'.\n(TODO(csilvers): is that right?)\n\nNote: This method honors ETag and If-None-Match headers. If your\nclient makes use of these headers, you don't have to worry about\nrepeatedly downloading the entire library unless library content\nhas changed since your last download.", 
+        "example": "[\n    {\n        \"icon_src\": \"/images/power-mode/badges/absolute-value-40x40.png\",\n        \"slug\": \"absolute-value\",\n        \"hide\": false,\n        \"title\": \"Absolute value\",\n        \"in_knowledge_map\": true,\n        \"description\": \"Understanding absolute value and solving absolute value equations and inequalities.\",\n        \"topic_page_url\": \"/math/algebra/absolute-value\",\n        \"kind\": \"Topic\",\n        \"videos\": [\n            {\n                \"kind\": \"Video\",\n                \"has_questions\": false,\n                \"description\": \"Absolute Value and Number Lines\",\n                \"url\": \"http://www.youtube.com/watch?v=frBJEYvyd-8&feature=youtube_gdata_player\",\n                \"title\": \"Absolute Value and Number Lines\",\n                \"author_names\": [\n                    \"Sal Khan\"\n                ],\n                \"duration\": 339,\n                \"ka_url\": \"http://www.khanacademy.org/video/absolute-value-and-number-lines\",\n                \"keywords\": \"Absolute, Value, and, Number, Lines, CC_6_NS_7, CC_6_NS_7_a, CC_6_NS_7_b, CC_6_NS_7_c\",\n                \"youtube_id\": \"frBJEYvyd-8\",\n                \"download_urls\": {\n                    \"mp4\": \"http://s3.amazonaws.com/KA-youtube-converted/frBJEYvyd-8.mp4/frBJEYvyd-8.mp4\",\n                    ...\n                },\n                \"views\": 92408,\n                \"readable_id\": \"absolute-value-and-number-lines\"\n            },\n            ...,\n    },\n    ...\n}", 
+        "http_method": "GET", 
+        "returns": "A list of topic nodes, one for each topic in the topic-tree.\nIn addition to normal entries like 'slug' and 'title', each\ntopic node has an entry 'videos', which is a list of dicts,\none for each video in the topic.  These video dicts have\nfields for the title, youtube-id, readable_id, etc.", 
+        "summary": "Retrieve a list of all videos in the library. (DEPRECATED)", 
+        "url": "/api/v1/playlists/library/list"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the name (internal-id) of the\nexercise, for instance 'one_step_equations'.", 
+                "name": "exercise_name", 
+                "part_of_url": true, 
+                "required": true
+            }, 
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the date/time to start searching for logs,\nin ISO 8601 Combined UTC format: YYYY-mm-ddTHH:MM:SSZ.\n(For instance, dt_start=2011-10-18T02:41:53Z)  Defaults to\nthe beginning of time.", 
+                "name": "dt_start", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the date/time to stop searching for logs,\nin ISO 8601 Combined UTC format: YYYY-mm-ddTHH:MM:SSZ.\n(For instance, dt_stop=2011-10-18T02:47:53Z)  Defaults to now.", 
+                "name": "dt_end", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The ProblemLog list represents a user's logs of each problem done\nfor a particular exercise; that is, each interaction with the\nexercise is a separate log entry.  Returns maximum of 500\nlogs per request.\n\nThe logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "[\n  {\n    \"attempts\": [\n      \"\"7\"\"\n    ],\n    \"correct\": true,\n    \"count_attempts\": 1,\n    \"count_hints\": 0,\n    \"earned_proficiency\": false,\n    \"exercise\": \"addition_1\",\n    \"exercise_non_summative\": \"null\",\n    \"hint_after_attempt_list\": [],\n    \"hint_time_taken_list\": [],\n    \"hint_used\": false,\n    \"ip_address\": \"98.90.107.999\",\n    \"ka_url\": \"http://www.khanacademy.org/exercises?exid=addition_1&problem_number=24\",\n    \"kind\": \"ProblemLog\",\n    \"points_earned\": 5,\n    \"problem_number\": 24,\n    \"problem_type\": \"0\",\n    \"random_float\": 0.66308677373591507,\n    \"seed\": \"22\",\n    \"sha1\": \"5c80a11e191b98714329c25640301e1b9623f7f6\",\n    \"suggested\": false,\n    \"time_done\": \"2011-10-10T13:34:39\",\n    \"time_taken\": 3,\n    \"time_taken_attempts\": [\n      3\n    ],\n    \"user\": \"you@gmail.com\"\n  }\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list with up to 500 records (each a dictionary).\nEach record has information about when the problem was done, if\nthe answer was correct, if a hint was used, how long the student\ntook to answer the problem, etc.", 
+        "summary": "Retrieve a list of ProblemLog entities for one exercise for one user.", 
+        "url": "/api/v1/user/exercises/<exercise_name>/log"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [], 
+        "description": "These are referenced in the results of both /api/v1/badges and\n/api/v1/user.", 
+        "example": "[\n    {\n        \"category\": 0,\n        \"chart_icon_src\": \"/images/badges/meteorite-small-chart.png\",\n        \"description\": \"Meteorite badges are common and easy to earn when just getting started.\",\n        \"icon_src\": \"/images/badges/meteorite-small.png\",\n        \"large_icon_src\": \"/images/badges/meteorite.png\",\n        \"type_label\": \"Meteorite\"\n    },\n    {\n        \"category\": 1,\n        \"chart_icon_src\": \"/images/badges/moon-small-chart.png\",\n        \"description\": \"Moon badges are uncommon and represent an investment in learning.\",\n        \"icon_src\": \"/images/badges/moon-small.png\",\n        \"large_icon_src\": \"/images/badges/moon.png\",\n        \"type_label\": \"Moon\"\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each of which describes a single badge\ncategory, including the type, description, image-url, etc.  The\n'category' field can be '0' for 'meteorite', '1' for 'moon', '2'\nfor 'earth', '3' for 'sun', '4' for 'black hole', or '5' for\n'challenge patch'.  See also: https://www.khanacademy.org/badges", 
+        "summary": "Retrieve list of all badge categories.", 
+        "url": "/api/v1/badges/categories"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "either the readable_id for this video\n(e.g. \"adding-subtracting-negative-numbers\") or (DEPRECATD) the\nyoutube_id for this vide (e.g. \"C38B33ZywWs\").", 
+                "name": "video_id", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "The <youtube_id> form is DEPRECATED; prefer querying by <readable_id>.", 
+        "example": "{\n  \"date_added\": \"2011-02-20T16:51:16Z\",\n  \"description\": \"Adding and subtracting negative numbers\",\n  \"download_urls\": {\n    \"m3u8\": \"http://s3.amazonaws.com/KA-youtube-converted/C38B33ZywWs.m3u8/C38B33ZywWs.m3u8\",\n    \"mp4\": \"http://s3.amazonaws.com/KA-youtube-converted/C38B33ZywWs.mp4/C38B33ZywWs.mp4\",\n    \"png\": \"http://s3.amazonaws.com/KA-youtube-converted/C38B33ZywWs.mp4/C38B33ZywWs.png\"\n  },\n  \"duration\": 555,\n  \"extra_properties\": null,\n  \"ka_url\": \"http://www.khanacademy.org/video/adding-subtracting-negative-numbers\",\n  \"keywords\": \"Math, negative, numbers, CC_7_NS_1_c\",\n  \"kind\": \"Video\",\n  \"readable_id\": \"adding-subtracting-negative-numbers\",\n  \"relative_url\": \"/video/adding-subtracting-negative-numbers\",\n  \"title\": \"Adding/Subtracting negative numbers\",\n  \"url\": \"http://www.youtube.com/watch?v=C38B33ZywWs&feature=youtube_gdata_player\",\n  \"views\": 313883,\n  \"youtube_id\": \"C38B33ZywWs\"\n}", 
+        "http_method": "GET", 
+        "returns": "A dict holding information about the video, including its\nreadable_id, youtube_id, description, and number of views.", 
+        "summary": "Retrieve the video identified by <readable_id> or <youtube_id>.", 
+        "url": "/api/v1/videos/<video_id>"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the name identifying the\nexercise (e.g. \"logarithms_1\")", 
+                "name": "exercise_name", 
+                "part_of_url": true, 
+                "required": true
+            }, 
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "{\n    \"exercise\": \"scientific_notation\",\n    \"exercise_model\": {\n        \"covers\": [],\n        \"creation_date\": \"2011-08-29T00:00:00\",\n        \"display_name\": \"Scientific notation\",\n        \"h_position\": 12,\n        \"ka_url\": \"http://www.khanacademy.org/exercises?exid=scientific_notation\",\n        \"kind\": \"Exercise\",\n        \"live\": true,\n        \"name\": \"scientific_notation\",\n        \"prerequisites\": [\n            \"exponents_3\",\n            \"exponent_rules\"\n        ],\n        \"relative_url\": \"/exercises?exid=scientific_notation\",\n        \"seconds_per_fast_problem\": 11.0,\n        \"short_display_name\": \"Sci. Notat.\",\n        \"summative\": \"false\",\n        \"v_position\": 5\n    },\n    \"exercise_states\": {\n        \"endangered\": false,\n        \"proficient\": true,\n        \"reviewing\": false,\n        \"struggling\": false,\n        \"suggested\": false,\n        \"summative\": false\n    },\n    \"first_done\": \"2011-10-11T00:32:55\",\n    \"kind\": \"UserExercise\",\n    \"last_done\": \"2011-10-11T00:38:08\",\n    \"last_review\": \"2011-10-11T00:05:42\",\n    \"longest_streak\": 10,\n    \"next_points\": 15,\n    \"point_display\": \"on\",\n    \"proficient_date\": \"2011-10-11T00:38:08\",\n    \"progress\": 1.0,\n    \"seconds_per_fast_problem\": 11.0,\n    \"streak\": 10,\n    \"streak_start\": 0.012500000000000001,\n    \"summative\": false,\n    \"total_correct\": 12,\n    \"total_done\": 14,\n    \"user\": \"you@gmail.com\"\n}", 
+        "http_method": "GET", 
+        "returns": "A dict with information about a single user's interaction with a\nsingle exercise, including the user-email, the exercise-name,\nthe number of problems attempted, the current streak, the\nlongest streak, etc.", 
+        "summary": "Information about a specific exercise engaged by a specific user.", 
+        "url": "/api/v1/user/exercises/<exercise_name>"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "Authentication is optional.  If authenticated, badges that have\nbeen earned by the specified user will contain extra UserBadge\ninformation about the context in which the badge was earned.  Some\nbadges may have missing descriptions or be completely hidden if a\nuser is not logged in or has not yet earned the badge.\n\nBy default, when authentication is used this returns information\nabout the logged in user, that is, the user that authenticated\nthis request.  If one of 'userId', 'username' or 'email' is\nprovided, then information is returned on that user instead\n(assuming the logged-in user has permission to see that\ninformation).  If more than one is specified, the first of\n'userId', 'username', and 'email' will be used, and the rest\nignored.  'userId' is preferred, since it is the only one of these\nfields that a user can't change.", 
+        "example": "[\n  {\n      \"badge_category\": 1,\n      \"description\": \"Going Transonic\",\n      \"name\": \"greattimedproblembadge\",\n      \"points\": 500,\n      \"safe_extended_description\": \"Quickly & correctly answer 10 exercise problems in a row (time limit depends on exercise difficulty)\",\n      /* The following user_badges property will only exist */\n      /* if an authenticated call is made and the user has earned */\n      /* this badge at least once. */\n      \"user_badges\": [\n          {\n              \"badge_name\": \"greattimedproblembadge\",\n              \"date\": \"2011-05-04T06:02:05Z\",\n              \"kind\": \"UserBadge\",\n              \"points_earned\": 500,\n              \"target_context\": {\n                  ... /* The target_context will contain either */ ...\n                  ... /* an Exercise or Playlist entity */ ...\n              },\n              \"target_context_name\": \"Addition 1\",\n              \"user\": \"you@gmail.com\"\n          },\n          ...\n      ]\n  },\n  ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each of which holds information about a single\nbadge, such as its name, its description, its category, etc.  If\nthe user was authenticated when making this request, the dict\ncontains a 'user_badges' value, which lists the badges that this\nuser has acquired.", 
+        "summary": "Retrieve a list of all badges.", 
+        "url": "/api/v1/badges"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the id-name of the topic, for instance\n'basic-exponents'.", 
+                "name": "topic_slug", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "{\n  \"children\": [\n    {\n      \"hide\": false,\n      \"id\": \"addition_3\",\n      \"kind\": \"Exercise\",\n      \"title\": \"Addition 3\",\n      \"url\": \"http://www.khanacademy.org/exercise/addition_3\"\n    },\n    ...\n  ],\n  \"description\": \"Adding and subtracting positive and negative whole numbers. Starts with 1+1=2 and covers carrying, borrowing, and word problems.\",\n  \"extended_slug\": \"math/arithmetic/addition-subtraction\",\n  \"hide\": false,\n  \"slug\": \"addition-subtraction\",\n  \"ka_url\": \"http://www.khanacademy.org/#addition-subtraction\",\n  \"kind\": \"Topic\",\n  \"relative_url\": \"/#addition-subtraction\",\n  \"standalone_title\": \"Addition and subtraction\",\n  \"tags\": [],\n  \"title\": \"Addition and subtraction\",\n  \"topic_page_url\": \"/math/arithmetic/addition-subtraction\"\n}", 
+        "http_method": "GET", 
+        "returns": "A dict containing the id of the topic (same as was passed in via\ntopic_slug), title, url, description, and children.  'children' is\na list of dicts, each containing information about a child.\nEach dict has at least 'id' and 'kind', the latter of which can\nbe 'Exercise', 'Video', or 'Topic'.  TODO(csilvers): complete\nthis list. The id is the topic-id for topics, the readable_id\nfor videos, and the name for exercises.\n\nTODO(tom): Fix 'id' to be the correct ID either here or in v2.", 
+        "summary": "Return info about a node in the topic-tree, including its children.", 
+        "url": "/api/v1/topic/<topic_slug>"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [], 
+        "description": "", 
+        "example": "[\n    {\n        \"covers\": [\n            \"special_derivatives\",\n            \"power_rule\"\n        ],\n        \"h_position\": 21,\n        \"kind\": \"Exercise\",\n        \"ka_url\": \"http://www.khanacademy.org/exercises?exid=chain_rule_1\",\n        \"live\": true,\n        \"name\": \"chain_rule_1\",\n        \"prerequisites\": [\n            \"special_derivatives\",\n            \"shifting_and_reflecting_functions\"\n        ],\n        \"seconds_per_fast_problem\": 12.0,\n        \"short_display_name\": \"Chain Ru. 1\",\n        \"summative\": false,\n        \"v_position\": 5\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each of which represents a single exercise.\nThe dict has keys such as 'name' and 'ka_url'.", 
+        "summary": "Retrieve a list of all exercises in the library.", 
+        "url": "/api/v1/exercises"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "TODO(csilvers): this example is out of date.\n{\n    \"all_proficient_exercises\": [\n        \"addition_1\",\n        \"subtraction_1\",\n        \"multiplication_0.5\"\n    ],\n    \"badge_counts\": {\n        \"0\": 1,\n        \"1\": 1,\n        \"2\": 0,\n        \"3\": 0,\n        \"4\": 0,\n        \"5\": 1\n    },\n    \"coaches\": [\n        \"yourcoach@gmail.com\"\n    ],\n    \"joined\": \"2011-02-04T06:01:47Z\",\n    \"kind\": \"UserData\",\n    \"last_activity\": \"2011-05-04T06:01:47Z\",\n    \"nickname\": \"Gob Bluth\",\n    \"points\": 9188,\n    \"proficient_exercises\": [\n        \"addition_1\",\n        \"subtraction_1\",\n        \"multiplication_0.5\"\n    ],\n    \"suggested_exercises\": [\n        \"addition_2\",\n        \"subtraction_2\"\n    ],\n    \"total_seconds_watched\": 105,\n    \"user_id\": \"you@gmail.com\",\n    \"prettified_user_email\": \"you@gmail.com\"\n}", 
+        "http_method": "GET", 
+        "returns": "A dict containing information about a user, including username,\nemail, userId, coaches, videos watched, exercises done,\nbadges earned, etc.", 
+        "summary": "Retrieve data about a user.", 
+        "url": "/api/v1/user"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [], 
+        "description": "Retrieve hierarchical organization of all topics in the library,\nalong with their videos and exercises. This represents the entire\nKhan Academy content. Topics are organized into groups and\nsub-groups such as \"Math\" and \"Algebra,\" respectively. The general\norganization follows the \"jump to topic\" bar of links found on the\nwww.khanacademy.org homepage.\n\nThis method honors ETag and If-None-Match headers.  If your client\nmakes use of these headers, you don't have to worry about\nrepeatedly downloading the entire topictree unless library content\nhas changed since your last download.", 
+        "example": "{\n  \"children\": [\n    {\n      \"children\": [\n        {\n          \"date_added\": \"2011-09-06T10:02:46Z\",\n          \"description\": \"www.khanacademy.org\",\n          \"download_urls\": {\n            \"m3u8\": \"http://s3.amazonaws.com/KA-youtube-converted/UDA3fF6WsVQ.m3u8/UDA3fF6WsVQ.m3u8\",\n            \"mp4\": \"http://s3.amazonaws.com/KA-youtube-converted/UDA3fF6WsVQ.mp4/UDA3fF6WsVQ.mp4\",\n            \"png\": \"http://s3.amazonaws.com/KA-youtube-converted/UDA3fF6WsVQ.mp4/UDA3fF6WsVQ.png\"\n          },\n          \"duration\": 473,\n          \"extra_properties\": null,\n          \"ka_url\": \"http://www.khanacademy.org/video/thank-you-khan-academy\",\n          \"keywords\": \"Khan, Academy, iMovie, export\",\n          \"kind\": \"Video\",\n          \"readable_id\": \"thank-you-khan-academy\",\n          \"relative_url\": \"/video/thank-you-khan-academy\",\n          \"title\": \"Thank You Khan Academy!\",\n          \"url\": \"http://www.youtube.com/watch?v=UDA3fF6WsVQ&feature=youtube_gdata_player\",\n          \"views\": 44517,\n          \"youtube_id\": \"UDA3fF6WsVQ\"\n        },\n        ...\n      ]\n      \"description\": \"Collection of interviews with and presentations by Salman Khan.  Also a few other mentions of Khan Academy at other talks.\",\n      \"extended_slug\": \"talks-and-interviews\",\n      \"hide\": false,\n      \"slug\": \"talks-and-interviews\",\n      \"ka_url\": \"http://www.khanacademy.org/#talks-and-interviews\",\n      \"kind\": \"Topic\",\n      \"relative_url\": \"/#talks-and-interviews\",\n      \"standalone_title\": \"Khan Academy-Related Talks and Interviews\",\n      \"tags\": [],\n      \"title\": \"Talks and Interviews\",\n      \"topic_page_url\": \"/talks-and-interviews\"\n    }\n  ],\n  \"description\": \"All concepts fit into the root of all knowledge\",\n  \"extended_slug\": \"root\",\n  \"hide\": true,\n  \"slug\": \"root\",\n  \"ka_url\": \"http://www.khanacademy.org/#root\",\n  \"kind\": \"Topic\",\n  \"relative_url\": \"/#root\",\n  \"standalone_title\": \"The Root of All Knowledge\",\n  \"tags\": [],\n  \"title\": \"The Root of All Knowledge\",\n  \"topic_page_url\": \"/root\"\n}", 
+        "http_method": "GET", 
+        "returns": "A dict representing the root node of the topic tree.  Keys in\nthis dict include 'title', 'description', 'url', and 'children'.\n'children' is a list of node-dicts (each of which likewise has\na title, description, url, and children of its own) that are\nfound 'under' this node in the topic tree.", 
+        "summary": "Retrieve full hierarchical listing of our entire library's topic tree.", 
+        "url": "/api/v1/topictree"
+    }, 
+    {
+        "access_control": "login-required(child_user_allowed,phantom_user_allowed)", 
+        "arguments": [
+            {
+                "description": "The youtube_id for this video (e.g.\n\"C38B33ZywWs\").", 
+                "name": "youtube_id", 
+                "part_of_url": true, 
+                "required": true
+            }, 
+            {
+                "description": "the user-id of the user.  This information is\nreturned by /api/v1/user and /api/v1/user/students.", 
+                "name": "userId", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the username of the user to retrieve\ninformation for.", 
+                "name": "username", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the email address of the user to retrieve\ninformation for.  (This is the email address that the user has\nregistered with Khan Academy.)", 
+                "name": "email", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the date/time to start searching for logs,\nin ISO 8601 Combined UTC format: YYYY-mm-ddTHH:MM:SSZ.\n(For instance, dt_start=2011-10-18T02:41:53Z)  Defaults to\nthe beginning of time.", 
+                "name": "dt_start", 
+                "part_of_url": false, 
+                "required": false
+            }, 
+            {
+                "description": "the date/time to stop searching for logs,\nin ISO 8601 Combined UTC format: YYYY-mm-ddTHH:MM:SSZ.\n(For instance, dt_stop=2011-10-18T02:47:53Z)  Defaults to now.", 
+                "name": "dt_end", 
+                "part_of_url": false, 
+                "required": false
+            }
+        ], 
+        "description": "The VideoLog list represents a user's logs of each session of\nwatching a particular video; that is, each interaction with the\nvideo is a separate log entry.  Returns maximum of 500\nlogs per request.\n\nThe logged-in user can only retrieve information about herself and\nher students.  Requires authentication.\n\nBy default, this returns information about the logged in user,\nthat is, the user that authenticated this request.  If one of\n'userId', 'username' or 'email' is provided, then information is\nreturned on that user instead (assuming the logged-in user has\npermission to see that information).  If more than one is\nspecified, the first of 'userId', 'username', and 'email' will be\nused, and the rest ignored.  'userId' is preferred, since it is\nthe only one of these fields that a user can't change.", 
+        "example": "[\n    {\n        \"kind\": \"VideoLog\",\n        \"playlist_titles\": [\n            \"Organic Chemistry\"\n        ],\n        \"points_earned\": 29,\n        \"seconds_watched\": 20,\n        \"time_watched\": \"2011-05-04T06:01:47Z\",\n        \"user\": \"you@gmail.com\",\n        \"video_title\": \"Ketone Naming\"\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list with up to 500 records (each a dictionary).\nEach record has information about when the log of watching a\nvideo was started, how long the session lasted, how many points\nwere earned, and more.", 
+        "summary": "Retrieve a list of VideoLog entities for one video for one user.", 
+        "url": "/api/v1/user/videos/<youtube_id>/log"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [], 
+        "description": "Retrieve hierarchical listing of the video portion of our library\n    (DEPRECATED)\n\n    This method is deprecated.  Prefer /api/v1/topictree for new code.\n\n    The output from this function is specialized for backwards\n    compatibility w/ our old \"/playlists\" API call that existed before\n    we had Topics.", 
+        "example": "<none>", 
+        "http_method": "GET", 
+        "returns": "Same data as /api/v1/topictree, with the following exceptions:\na) the new-and-noteworthy topic is absent, and b) videos in a\nnode's children topics can be included in that node as well,\nunder the new field 'playlist'.\n\nHowever, while the data is the same, the format is different;\nfor instance, 'title' is called 'name' instead, and children are\nstored under 'items'.", 
+        "summary": "", 
+        "url": "/api/v1/playlists/library"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "either the readable_id for this video\n(e.g. \"adding-subtracting-negative-numbers\") or (DEPRECATD) the\nyoutube_id for this vide (e.g. \"C38B33ZywWs\").", 
+                "name": "video_id", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "The <youtube_id> form is DEPRECATED; prefer querying by <readable_id>.", 
+        "example": "[\n    {\n        \"covers\": [\n            \"multiplication_1\"\n        ],\n        \"h_position\": 12,\n        \"kind\": \"Exercise\",\n        \"ka_url\": \"http://www.khanacademy.org/exercises?exid=logarithms_1\",\n        \"live\": true,\n        \"name\": \"logarithms_1\",\n        \"prerequisites\": [\n            \"exponents_3\"\n        ],\n        \"seconds_per_fast_problem\": 8.0,\n        \"short_display_name\": \"Log. 1\",\n        \"summative\": false,\n        \"v_position\": 3\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each representing a video (as in\n/api/v1/videos/<video_id>).", 
+        "summary": "Retrieve a list of all exercises associated with video <video_id>.", 
+        "url": "/api/v1/videos/<video_id>/exercises"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the id-name of the topic, for instance\n'basic-exponents'.", 
+                "name": "topic_slug", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "/api/v1/playlists/<topic_slug>/videos and\n/api/v1/topics/<topic_slug>/videos are identical.  The former is\ndeprecated; all new code should use the '/topics/' url instead.", 
+        "example": "[\n  {\n    \"date_added\": \"2012-02-16T21:32:49Z\",\n    \"description\": \"Why we study differential calculus\",\n    \"download_urls\": {\n      \"m3u8\": \"http://s3.amazonaws.com/KA-youtube-converted/EKvHQc3QEow.m3u8/EKvHQc3QEow.m3u8\",\n      \"mp4\": \"http://s3.amazonaws.com/KA-youtube-converted/EKvHQc3QEow.mp4/EKvHQc3QEow.mp4\",\n      \"png\": \"http://s3.amazonaws.com/KA-youtube-converted/EKvHQc3QEow.mp4/EKvHQc3QEow.png\"\n    },\n    \"duration\": 547,\n    \"ka_url\": \"http://www.khanacademy.org/video/newton-leibniz-and-usain-bolt\",\n    \"keywords\": \"math, calculus, marquee\",\n    \"kind\": \"Video\",\n    \"position\": 1,\n    \"readable_id\": \"newton-leibniz-and-usain-bolt\",\n    \"relative_url\": \"/video/newton-leibniz-and-usain-bolt\",\n    \"title\": \"Newton Leibniz and Usain Bolt\",\n    \"url\": \"http://www.youtube.com/watch?v=EKvHQc3QEow&feature=youtube_gdata_player\",\n    \"views\": 75613,\n    \"youtube_id\": \"EKvHQc3QEow\"\n  },\n  ...\n]", 
+        "http_method": "GET", 
+        "returns": "A json-encoded list of dicts, each of which holds information\nabout one video in the given topic.  The dict includes the\nreadable-id of the video, its title, its url, its youtube-id, etc.", 
+        "summary": "Retrieve a list of all videos in the topic identified by <topic_slug>.", 
+        "url": "/api/v1/topic/<topic_slug>/videos"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the name identifying the\nexercise (e.g. \"logarithms_1\")", 
+                "name": "exercise_name", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "[\n    {\n        \"covers\": [],\n        \"creation_date\": \"2011-08-29T00:00:00Z\",\n        \"display_name\": \"Subtraction 1\",\n        \"h_position\": 1,\n        \"ka_url\": \"http://www.khanacademy.org/exercises?exid=subtraction_1\",\n        \"kind\": \"Exercise\",\n        \"live\": true,\n        \"name\": \"subtraction_1\",\n        \"num_milestones\": 1,\n        \"prerequisites\": [\n            \"addition_1\"\n        ],\n        \"relative_url\": \"/exercises?exid=subtraction_1\",\n        \"seconds_per_fast_problem\": 4.0,\n        \"short_display_name\": \"Sub. 1\",\n        \"summative\": false,\n        \"v_position\": 5\n    },\n    ...\n]", 
+        "http_method": "GET", 
+        "returns": "A list of dicts, each of which is information about a single\nexercise (same as for /api/v1/exercises).", 
+        "summary": "Retrieve all the exercises that list <exercise_name> as a prerequisite.", 
+        "url": "/api/v1/exercises/<exercise_name>/followup_exercises"
+    }, 
+    {
+        "access_control": "open-access", 
+        "arguments": [
+            {
+                "description": "the name identifying the\nexercise (e.g. \"logarithms_1\")", 
+                "name": "exercise_name", 
+                "part_of_url": true, 
+                "required": true
+            }
+        ], 
+        "description": "", 
+        "example": "{\n    \"covers\": [\n        \"multiplication_1\"\n    ],\n    \"h_position\": 12,\n    \"kind\": \"Exercise\",\n    \"ka_url\": \"http://www.khanacademy.org/exercises?exid=logarithms_1\",\n    \"live\": true,\n    \"name\": \"logarithms_1\",\n    \"prerequisites\": [\n        \"exponents_3\"\n    ],\n    \"proficient\": false,\n    \"review\": false,\n    \"seconds_per_fast_problem\": 8.0,\n    \"short_display_name\": \"Log. 1\",\n    \"suggested\": true,\n    \"summative\": false,\n    \"v_position\": 3\n}", 
+        "http_method": "GET", 
+        "returns": "A dict holding information about the given exercise, including\nname, url, etc.  'name' will always be the same as the\n'exercise_name' argument.", 
+        "summary": "Retrieve exercise identified by <exercise_name>.", 
+        "url": "/api/v1/exercises/<exercise_name>"
+    }
+]
