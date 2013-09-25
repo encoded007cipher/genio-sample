@@ -3,6 +3,7 @@ namespace MyApp;
 
 use PayPal\Common\PPModel;
 use PayPal\Rest\IResource;
+use PayPal\Rest\RestHandler;
 use PayPal\Transport\PPRestCall;
 
 class Khan extends PPModel implements IResource {
@@ -24,7 +25,7 @@ class Khan extends PPModel implements IResource {
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/playlists/$topicSlug/exercises?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/playlists/$topicSlug/exercises?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -44,7 +45,7 @@ class Khan extends PPModel implements IResource {
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/exercises/$exerciseName/videos?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/exercises/$exerciseName/videos?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -60,7 +61,7 @@ These are referenced in the results of both /api/v1/badges and
 	public static function get_badges_categories(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/badges/categories?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/badges/categories?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -91,7 +92,7 @@ the only one of these fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user/videos/$youtubeId?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user/videos/$youtubeId?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -125,7 +126,7 @@ the only one of these fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user/exercises/$exerciseName/followup_exercises?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user/exercises/$exerciseName/followup_exercises?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -147,7 +148,7 @@ deprecated; all new code should use the '/topics/' url instead.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/playlists/$topicSlug/videos?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/playlists/$topicSlug/videos?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -167,7 +168,7 @@ deprecated; all new code should use the '/topics/' url instead.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/topic/$topicSlug/exercises?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/topic/$topicSlug/exercises?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -198,7 +199,7 @@ the only one of these fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user/exercises/$exerciseName?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user/exercises/$exerciseName?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -224,7 +225,7 @@ the only one of these fields that a user can't change.
 	public static function get_user_playlists(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user/playlists?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user/playlists?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -246,7 +247,7 @@ has changed since your last download.
 	public static function get_playlists_library_list(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/playlists/library/list?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/playlists/library/list?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -282,7 +283,7 @@ the only one of these fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user/exercises/$exerciseName/log?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user/exercises/$exerciseName/log?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -302,7 +303,7 @@ The <youtube_id> form is DEPRECATED; prefer querying by <readable_id>.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/videos/$videoId?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/videos/$videoId?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -332,7 +333,7 @@ fields that a user can't change.
 	public static function get_badges(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/badges?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/badges?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -352,7 +353,7 @@ fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/topic/$topicSlug?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/topic/$topicSlug?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -372,7 +373,7 @@ fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/exercises/$exerciseName?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/exercises/$exerciseName?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -398,7 +399,7 @@ the only one of these fields that a user can't change.
 	public static function get_user(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -423,7 +424,7 @@ has changed since your last download.
 	public static function get_topictree(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/topictree?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/topictree?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -459,7 +460,7 @@ the only one of these fields that a user can't change.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/user/videos/$youtubeId/log?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/user/videos/$youtubeId/log?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -481,7 +482,7 @@ Retrieve hierarchical listing of the video portion of our library
 	public static function get_playlists_library(array $queryParameters, $apiContext) {
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/playlists/library?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/playlists/library?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -501,7 +502,7 @@ The <youtube_id> form is DEPRECATED; prefer querying by <readable_id>.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/videos/$videoId/exercises?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/videos/$videoId/exercises?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -523,7 +524,7 @@ deprecated; all new code should use the '/topics/' url instead.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/topic/$topicSlug/videos?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/topic/$topicSlug/videos?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 	/*
@@ -543,7 +544,7 @@ deprecated; all new code should use the '/topics/' url instead.
 		}
 		$payload = "";
 		$call = new PPRestCall($apiContext);
-		$json = $call->execute(array('PayPal\Rest\RestHandler'), "/api/v1/exercises/$exerciseName/followup_exercises?" . http_build_query($queryParameters), "GET", $payload);
+		$json = $call->execute(array(new RestHandler()), "/api/v1/exercises/$exerciseName/followup_exercises?" . http_build_query($queryParameters), "GET", $payload);
 		return $json;
 	}
 }
