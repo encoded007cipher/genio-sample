@@ -1,0 +1,47 @@
+[
+    {
+        "name": "paypal/sdk-core-php",
+        "version": "v2.5.0",
+        "version_normalized": "2.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/paypal/sdk-core-php.git",
+            "reference": "c014a39b73287171123895db4f7fe4bfaa6d61ed"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/c014a39b73287171123895db4f7fe4bfaa6d61ed",
+            "reference": "c014a39b73287171123895db4f7fe4bfaa6d61ed",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": ">=5.3.0"
+        },
+        "time": "2013-09-26 10:24:02",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "PayPal": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache2"
+        ],
+        "authors": [
+            {
+                "name": "PayPal",
+                "homepage": "https://github.com/paypal/sdk-core-php/contributors"
+            }
+        ],
+        "description": "PayPal Core SDK for PHP",
+        "homepage": "https://github.com/paypal/sdk-core-php",
+        "keywords": [
+            "paypal",
+            "php",
+            "sdk"
+        ]
+    }
+]
