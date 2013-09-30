@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Sample\\Genio\\Paypal\\Com": "stubs"
+            "Paypal\\Genio\\Sample": "stubs"
         }
     }
 }

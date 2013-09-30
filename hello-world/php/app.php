@@ -2,8 +2,8 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use PayPal\Common\PPApiContext;
-use Sample\Genio\Paypal\Com\SayHelloRequest;
-use Sample\Genio\Paypal\Com\geniosample;
+use Paypal\Genio\Sample\SayHelloRequest;
+use Paypal\Genio\Sample\geniosample;
 
 // Create the API context. 
 // See  https://github.com/paypal/sdk-core-php/wiki/Configuring-the-SDK#connection-information for all supported parameters.

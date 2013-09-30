@@ -1,10 +1,10 @@
 <?php
-namespace Sample\Genio\Paypal\Com;
+namespace Paypal\Genio\Sample;
 use PayPal\Core\PPXmlMessage;
 /**
  * 
  */
-class SayHelloResponse extends PPXmlMessage {
+class SayHelloRequest extends PPXmlMessage {
 	/**
 	 * 
 	 * @access public
@@ -23,5 +23,17 @@ class SayHelloResponse extends PPXmlMessage {
         $this->message = $message;
     }
 
+	public function toXMLString()
+	{
+		$str = '<tns:SayHelloRequest>';
+		if($this->message != NULL)
+		{
+			$str .= '<message>';
+			$str .= $this->message;
+			$str .= '</message>';
+		}
+		$str .= '</tns:SayHelloRequest>';
+		return $str;
+	}
 
 }

@@ -1,11 +1,11 @@
 <?php
-namespace Sample\Genio\Paypal\Com;
+namespace Paypal\Genio\Sample;
 
 use PayPal\Core\PPBaseService;
 use PayPal\Core\PPUtils;
 use PayPal\Exception\PPTransformerException;
-use Sample\Genio\Paypal\Com\SayHelloRequest;
-use Sample\Genio\Paypal\Com\SayHelloResponse;
+use Paypal\Genio\Sample\SayHelloRequest;
+use Paypal\Genio\Sample\SayHelloResponse;
 /**
 * AUTO GENERATED service wrapper class
 */
@@ -22,13 +22,13 @@ class geniosample extends PPBaseService {
 
 	/**
 	* 
-	* @param Sample\Genio\Paypal\Com\SayHelloRequest $sayHelloRequest
+	* @param Paypal\Genio\Sample\SayHelloRequest $sayHelloRequest
 	* @param PayPal\Core\PPApiContext $apiContext
-	* @return Sample\Genio\Paypal\Com\SayHelloResponse
+	* @return Paypal\Genio\Sample\SayHelloResponse
 	*/
 	public function sayHello( $sayHelloRequest, $apiContext) {
 		
-		$apiContext->addHttpHeader("SOAPAction", '"uri:com.paypal.genio.sample/sayHello"');
+		$apiContext->addHttpHeader("SOAPAction", '"uri:sample.genio.paypal.com/sayHello"');
 	
 		$handlers = array(
 			new \PayPal\Handler\GenericSoapHandler($this->xmlNamespacePrefixProvider()),
@@ -51,7 +51,7 @@ class geniosample extends PPBaseService {
 			$namespace .= 'xmlns:xml="http://www.w3.org/XML/1998/namespace" ';
 			$namespace .= 'xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" ';
 			$namespace .= 'xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" ';
-			$namespace .= 'xmlns:tns="http://com.paypal.genio.sample" ';
+			$namespace .= 'xmlns:tns="http://sample.genio.paypal.com" ';
 			$namespace .= 'xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" ';
 			$namespace .= 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ';
 			$namespace .= 'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ';
